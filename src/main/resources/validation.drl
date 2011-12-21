@@ -1,0 +1,26 @@
+package com.sample
+
+
+query "validRequest" () 
+    r : Request(valid == true)
+end
+
+
+
+rule "Unknown Customer" ruleflow-group "Validation"
+    when
+        r: Request()
+        not Person(id == r.personId)
+    then
+    	System.out.println("Unknown customer");
+        r.setInvalid("Unknown customer");
+end
+
+rule "Underage Customer" ruleflow-group "Validation"
+    when
+        r: Request()
+        Person(id == r.personId, age < 18)
+    then
+    	System.out.println("Underage customer");
+        r.setInvalid("Underage customer");
+end

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_validRequestItem" structureRef="Boolean" />
+  <itemDefinition id="_requestNameItem" structureRef="String" />
+
+  <process processType="Private" isExecutable="true" id="com.sample.bpmn.hello" name="Hello World" >
+
+    <extensionElements>
+     <tns:import name="java.util.Collection" />
+     <tns:import name="java.util.List" />
+     <tns:import name="java.util.ArrayList" />
+     <tns:import name="java.util.Iterator" />
+     <tns:import name="com.sample.Person" />
+     <tns:import name="com.sample.Request" />
+     <tns:import name="org.drools.runtime.rule.QueryResults" />
+     <tns:import name="org.drools.runtime.rule.QueryResultsRow" />
+     <tns:import name="org.drools.runtime.KnowledgeRuntime" />
+     <tns:import name="org.drools.runtime.StatefulKnowledgeSession" />
+     <tns:import name="org.drools.runtime.rule.FactHandle" />
+    </extensionElements>
+    <!-- process variables -->
+    <property id="validRequest" itemSubjectRef="_validRequestItem"/>
+    <property id="requestName" itemSubjectRef="_requestNameItem"/>
+
+    <!-- nodes -->
+    <scriptTask id="_17" name="Init" >
+      <script>kcontext.setVariable("validRequest", true);</script>
+    </scriptTask>
+    <startEvent id="_1" name="Start" />
+    <scriptTask id="_16" name="Invalid Action" >
+      <script>System.out.println("Invalid Actions.....");</script>
+    </scriptTask>
+    <businessRuleTask id="_4" name="Rule" g:ruleFlowGroup="Validation" >
+    </businessRuleTask>
+    <scriptTask id="_11" name="Auswertung" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering Auswertung Node");
+
+QueryResults results = kcontext.getKnowledgeRuntime().getQueryResults("validRequest");
+
+for ( QueryResultsRow row : results ) {
+	System.out.println( row); 
+	Request r = ( Request ) row.get( "r" );
+	System.out.println( r.getPersonId() + " is Valid "+r.isValid() + "\n" );
+    if  (r.isValid() )
+	{ 
+			kcontext.setVariable("validRequest", true);
+//			kcontext.setVariable("requestName" , r.getPersonId();
+	}
+}
+
+System.out.println("We have "+results.size() + " Valid Requests");
+
+System.out.println("Leaving Auswertung Node");</script>
+    </scriptTask>
+    <endEvent id="_12" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <exclusiveGateway id="_13" name="Gateway" gatewayDirection="Diverging" />
+    <endEvent id="_14" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <scriptTask id="_15" name="Valid Action" >
+      <script>System.out.println("Valid Actions.....");</script>
+    </scriptTask>
+
+    <!-- connections -->
+    <sequenceFlow id="_1-_17" sourceRef="_1" targetRef="_17" />
+    <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="invalid Request" tns:priority="99" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" >eval(true)</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_17-_4" sourceRef="_17" targetRef="_4" />
+    <sequenceFlow id="_4-_11" sourceRef="_4" targetRef="_11" />
+    <sequenceFlow id="_15-_12" sourceRef="_15" targetRef="_12" />
+    <sequenceFlow id="_11-_13" sourceRef="_11" targetRef="_13" />
+    <sequenceFlow id="_16-_14" sourceRef="_16" targetRef="_14" />
+    <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="Valid Request" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >//System.out.println("valid?" + validRequest);
+return validRequest;</conditionExpression>
+    </sequenceFlow>
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="com.sample.bpmn.hello" >
+      <bpmndi:BPMNShape bpmnElement="_17" >
+        <dc:Bounds x="78" y="44" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="20" y="37" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_16" >
+        <dc:Bounds x="453" y="163" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" >
+        <dc:Bounds x="214" y="41" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_11" >
+        <dc:Bounds x="338" y="49" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_12" >
+        <dc:Bounds x="679" y="63" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" >
+        <dc:Bounds x="467" y="46" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" >
+        <dc:Bounds x="466" y="242" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_15" >
+        <dc:Bounds x="560" y="48" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_1-_17" >
+        <di:waypoint x="44" y="61" />
+        <di:waypoint x="118" y="68" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-_16" >
+        <di:waypoint x="491" y="70" />
+        <di:waypoint x="493" y="187" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17-_4" >
+        <di:waypoint x="118" y="68" />
+        <di:waypoint x="254" y="65" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4-_11" >
+        <di:waypoint x="254" y="65" />
+        <di:waypoint x="378" y="73" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_12" >
+        <di:waypoint x="600" y="72" />
+        <di:waypoint x="703" y="87" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11-_13" >
+        <di:waypoint x="378" y="73" />
+        <di:waypoint x="491" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_16-_14" >
+        <di:waypoint x="493" y="187" />
+        <di:waypoint x="490" y="266" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_13-_15" >
+        <di:waypoint x="491" y="70" />
+        <di:waypoint x="600" y="72" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
