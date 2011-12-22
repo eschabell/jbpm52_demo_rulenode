@@ -35,24 +35,33 @@
     <property id="requestName" itemSubjectRef="_requestNameItem"/>
 
     <!-- nodes -->
-    <scriptTask id="_17" name="Init" >
-      <script>kcontext.setVariable("validRequest", true);</script>
+    <scriptTask id="_17" name="Initialize" >
+      <script>System.out.println("Entering Initialize Node");
+
+kcontext.setVariable("validRequest", true);
+
+System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
+
+System.out.println("Leaving Initialize Node");
+</script>
+    </scriptTask>
+    <scriptTask id="_16" name="Invalid Action" >
+      <script>System.out.println("Entering Invalid Action Node.");
+
+System.out.println("Leaving Invalid Action Node.");</script>
     </scriptTask>
     <startEvent id="_1" name="Start" />
-    <scriptTask id="_16" name="Invalid Action" >
-      <script>System.out.println("Invalid Actions.....");</script>
-    </scriptTask>
-    <businessRuleTask id="_4" name="Rule" g:ruleFlowGroup="Validation" >
+    <businessRuleTask id="_4" name="BusinessRule" g:ruleFlowGroup="Validation" >
     </businessRuleTask>
-    <scriptTask id="_11" name="Auswertung" scriptFormat="http://www.java.com/java" >
-      <script>System.out.println("Entering Auswertung Node");
+    <scriptTask id="_11" name="Evaluation" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering Evaluation Node");
 
 QueryResults results = kcontext.getKnowledgeRuntime().getQueryResults("validRequest");
 
 for ( QueryResultsRow row : results ) {
-	System.out.println( row); 
+	System.out.println("Row of results is: " + row); 
 	Request r = ( Request ) row.get( "r" );
-	System.out.println( r.getPersonId() + " is Valid "+r.isValid() + "\n" );
+	System.out.println( "ID: " + r.getPersonId() + " is Valid: "+r.isValid() + "\n" );
     if  (r.isValid() )
 	{ 
 			kcontext.setVariable("validRequest", true);
@@ -62,17 +71,19 @@ for ( QueryResultsRow row : results ) {
 
 System.out.println("We have "+results.size() + " Valid Requests");
 
-System.out.println("Leaving Auswertung Node");</script>
+System.out.println("Leaving Evaluation Node");</script>
     </scriptTask>
-    <endEvent id="_12" name="End" >
+    <endEvent id="_12" name="Valid End" >
         <terminateEventDefinition/>
     </endEvent>
     <exclusiveGateway id="_13" name="Gateway" gatewayDirection="Diverging" />
-    <endEvent id="_14" name="End" >
+    <endEvent id="_14" name="Invalid End" >
         <terminateEventDefinition/>
     </endEvent>
     <scriptTask id="_15" name="Valid Action" >
-      <script>System.out.println("Valid Actions.....");</script>
+      <script>System.out.println("Entering Valid Action Node.");
+
+System.out.println("Leaving Valid Action Node.");</script>
     </scriptTask>
 
     <!-- connections -->
@@ -86,7 +97,7 @@ System.out.println("Leaving Auswertung Node");</script>
     <sequenceFlow id="_11-_13" sourceRef="_11" targetRef="_13" />
     <sequenceFlow id="_16-_14" sourceRef="_16" targetRef="_14" />
     <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="Valid Request" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >//System.out.println("valid?" + validRequest);
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway has detected a request with value of: " + validRequest);
 return validRequest;</conditionExpression>
     </sequenceFlow>
 
@@ -95,63 +106,63 @@ return validRequest;</conditionExpression>
   <bpmndi:BPMNDiagram>
     <bpmndi:BPMNPlane bpmnElement="com.sample.bpmn.hello" >
       <bpmndi:BPMNShape bpmnElement="_17" >
-        <dc:Bounds x="78" y="44" width="80" height="48" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_1" >
-        <dc:Bounds x="20" y="37" width="48" height="48" />
+        <dc:Bounds x="100" y="23" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="453" y="163" width="80" height="48" />
+        <dc:Bounds x="368" y="12" width="105" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="16" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" >
-        <dc:Bounds x="214" y="41" width="80" height="48" />
+        <dc:Bounds x="152" y="108" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_11" >
-        <dc:Bounds x="338" y="49" width="80" height="48" />
+        <dc:Bounds x="215" y="16" width="88" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="679" y="63" width="48" height="48" />
+        <dc:Bounds x="528" y="142" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
-        <dc:Bounds x="467" y="46" width="48" height="48" />
+        <dc:Bounds x="321" y="78" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_14" >
-        <dc:Bounds x="466" y="242" width="48" height="48" />
+        <dc:Bounds x="517" y="23" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="560" y="48" width="80" height="48" />
+        <dc:Bounds x="387" y="144" width="105" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_17" >
-        <di:waypoint x="44" y="61" />
-        <di:waypoint x="118" y="68" />
+        <di:waypoint x="40" y="80" />
+        <di:waypoint x="140" y="47" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_16" >
-        <di:waypoint x="491" y="70" />
-        <di:waypoint x="493" y="187" />
+        <di:waypoint x="345" y="102" />
+        <di:waypoint x="420" y="36" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_17-_4" >
-        <di:waypoint x="118" y="68" />
-        <di:waypoint x="254" y="65" />
+        <di:waypoint x="140" y="47" />
+        <di:waypoint x="192" y="132" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_4-_11" >
-        <di:waypoint x="254" y="65" />
-        <di:waypoint x="378" y="73" />
+        <di:waypoint x="192" y="132" />
+        <di:waypoint x="259" y="40" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_15-_12" >
-        <di:waypoint x="600" y="72" />
-        <di:waypoint x="703" y="87" />
+        <di:waypoint x="439" y="168" />
+        <di:waypoint x="552" y="166" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_11-_13" >
-        <di:waypoint x="378" y="73" />
-        <di:waypoint x="491" y="70" />
+        <di:waypoint x="259" y="40" />
+        <di:waypoint x="345" y="102" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_16-_14" >
-        <di:waypoint x="493" y="187" />
-        <di:waypoint x="490" y="266" />
+        <di:waypoint x="420" y="36" />
+        <di:waypoint x="541" y="47" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_15" >
-        <di:waypoint x="491" y="70" />
-        <di:waypoint x="600" y="72" />
+        <di:waypoint x="345" y="102" />
+        <di:waypoint x="439" y="168" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

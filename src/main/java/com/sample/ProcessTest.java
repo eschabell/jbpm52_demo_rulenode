@@ -29,15 +29,14 @@ public class ProcessTest {
 			StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
 			KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(ksession, "test", 1000);
 			ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new WSHumanTaskHandler());
+
 			// start a new process instance
-			
 			Person person = new Person("john", "John Doe");
 			person.setAge(16);
 			Request request = new Request("12345");
 			request.setPersonId("john");
 			request.setAmount(1000L);
 			ksession.insert(person);
-//			FactHandle handle = ksession.insert(request);
 
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("aPerson", person);
@@ -45,7 +44,7 @@ public class ProcessTest {
 			WorkflowProcessInstance processInstance = (WorkflowProcessInstance) ksession.startProcess("com.sample.bpmn.hello", params);
 			ksession.insert(processInstance);
 			ksession.fireAllRules();
-			System.out.println("Rules Fired ...");
+			System.out.println("Process Ended.");
 			logger.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
