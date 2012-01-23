@@ -11,11 +11,9 @@ import org.drools.io.ResourceFactory;
 import org.drools.logger.KnowledgeRuntimeLogger;
 import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
-//import org.drools.runtime.rule.FactHandle;
 import org.drools.runtime.process.WorkflowProcessInstance;
-// import org.jbpm.examples.request.Person;
-// import org.jbpm.examples.request.Request;
 import org.jbpm.process.workitem.wsht.WSHumanTaskHandler;
+//import org.jbpm.process.workitem.wsht.WSHumanTaskHandler;
 
 /**
  * This is a sample file to launch a process.
