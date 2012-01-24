@@ -20,14 +20,23 @@ of the process as it enters and leaves nodes. You can tweak the path taken by se
 An example run should look like this if your validRequest is true:
 
 Entering Initialize Node
+
 Set validRequest to: true
-Leaving Initialize Node
-Entering Evaluation Node
-We have 0 Valid Requests
-Leaving Evaluation Node
-Gateway has detected a request with value of: true
-Entering Valid Action Node.
-Leaving Valid Action Node.
-Process Ended.
+
+	Leaving Initialize Node
+
+	Entering Evaluation Node
+
+	We have 0 Valid Requests
+
+	Leaving Evaluation Node
+
+	Gateway has detected a request with value of: true
+
+	Entering Valid Action Node.
+
+	Leaving Valid Action Node.
+
+	Process Ended.
 
 Enjoy!
