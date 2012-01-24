@@ -14,26 +14,20 @@ To make use of this process project, just clone and make use of the maven setup 
   4) run ProcessTest class (output in console) at src/main/java/ProcessTest
   
 You can read the test class comments for details as to what is happening and you will see the output 
-of the process as it enters and leaves nodes. It should look like this:
+of the process as it enters and leaves nodes. You can tweak the path taken by setting a variable 
+'validRequest' in the Initialize node, it is found in the Action property of that node.
+
+An example run should look like this if your validRequest is true:
 
 Entering Initialize Node
-
 Set validRequest to: true
-
 Leaving Initialize Node
-
 Entering Evaluation Node
-
 We have 0 Valid Requests
-
 Leaving Evaluation Node
-
 Gateway has detected a request with value of: true
-
 Entering Valid Action Node.
-
 Leaving Valid Action Node.
-
 Process Ended.
 
 Enjoy!

@@ -38,6 +38,7 @@
     <scriptTask id="_17" name="Initialize" >
       <script>System.out.println("Entering Initialize Node");
 
+// Set this to true or false to adjust path gateway will take.
 kcontext.setVariable("validRequest", true);
 
 System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
@@ -45,12 +46,12 @@ System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"
 System.out.println("Leaving Initialize Node");
 </script>
     </scriptTask>
+    <startEvent id="_1" name="Start" />
     <scriptTask id="_16" name="Invalid Action" >
       <script>System.out.println("Entering Invalid Action Node.");
 
 System.out.println("Leaving Invalid Action Node.");</script>
     </scriptTask>
-    <startEvent id="_1" name="Start" />
     <businessRuleTask id="_4" name="BusinessRule" g:ruleFlowGroup="Validation" >
     </businessRuleTask>
     <scriptTask id="_11" name="Evaluation" scriptFormat="http://www.java.com/java" >
@@ -108,11 +109,11 @@ return validRequest;</conditionExpression>
       <bpmndi:BPMNShape bpmnElement="_17" >
         <dc:Bounds x="96" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="582" y="7" width="80" height="48" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_1" >
         <dc:Bounds x="16" y="56" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_16" >
+        <dc:Bounds x="582" y="7" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" >
         <dc:Bounds x="208" y="56" width="80" height="48" />
