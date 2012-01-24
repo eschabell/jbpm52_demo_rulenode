@@ -5,13 +5,13 @@ This git repository helps you get up and running quickly with the jBPM 5 and a u
 
 To make use of this process project, just clone and make use of the maven setup as follows:
 
-  1) clone the repo:    git clone git://github.com/eschabell/jbpm52_demo_rulenode.git
+	1) clone the repo:    git clone git://github.com/eschabell/jbpm52_demo_rulenode.git
 
-  2) get project deps:  mvn eclipse:eclipse   
+	2) get project deps:  mvn eclipse:eclipse   
 
-  3) view process def:  src/main/resources/rulenodedemo.bpmn2
+	3) view process def:  src/main/resources/rulenodedemo.bpmn2
 
-  4) run ProcessTest class (output in console) at src/main/java/ProcessTest
+	4) run ProcessTest class (output in console) at src/main/java/ProcessTest
   
 You can read the test class comments for details as to what is happening and you will see the output 
 of the process as it enters and leaves nodes. You can tweak the path taken by setting a variable 
@@ -19,9 +19,9 @@ of the process as it enters and leaves nodes. You can tweak the path taken by se
 
 An example run should look like this if your validRequest is true:
 
-Entering Initialize Node
+	Entering Initialize Node
 
-Set validRequest to: true
+	Set validRequest to: true
 
 	Leaving Initialize Node
 
