@@ -15,7 +15,17 @@ To make use of this process project, just clone and make use of the maven setup 
   
 You can read the test class comments for details as to what is happening and you will see the output 
 of the process as it enters and leaves nodes. You can tweak the path taken by setting a variable 
-'validRequest' in the Initialize node, it is found in the Action property of that node.
+'validRequest' in the Initialize node, it is found in the Action property of that node and looks like
+this:
+
+	System.out.println("Entering Initialize Node");
+
+	// Set this to true or false to adjust path gateway will take.
+	kcontext.setVariable("validRequest", true);
+
+	System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
+
+	System.out.println("Leaving Initialize Node");
 
 An example run should look like this if your validRequest is true:
 
