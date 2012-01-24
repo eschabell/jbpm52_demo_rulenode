@@ -15,15 +15,15 @@
   <itemDefinition id="_validRequestItem" structureRef="Boolean" />
   <itemDefinition id="_requestNameItem" structureRef="String" />
 
-  <process processType="Private" isExecutable="true" id="com.sample.bpmn.hello" name="Hello World" >
+  <process processType="Private" isExecutable="true" id="org.jbpm.demo.rulenode" name="Rule Node Demo" >
 
     <extensionElements>
      <tns:import name="java.util.Collection" />
      <tns:import name="java.util.List" />
      <tns:import name="java.util.ArrayList" />
      <tns:import name="java.util.Iterator" />
-     <tns:import name="com.sample.Person" />
-     <tns:import name="com.sample.Request" />
+     <tns:import name="org.jbpm.demo.Person" />
+     <tns:import name="org.jbpm.demo.Request" />
      <tns:import name="org.drools.runtime.rule.QueryResults" />
      <tns:import name="org.drools.runtime.rule.QueryResultsRow" />
      <tns:import name="org.drools.runtime.KnowledgeRuntime" />
@@ -104,65 +104,65 @@ return validRequest;</conditionExpression>
   </process>
 
   <bpmndi:BPMNDiagram>
-    <bpmndi:BPMNPlane bpmnElement="com.sample.bpmn.hello" >
+    <bpmndi:BPMNPlane bpmnElement="org.jbpm.demo.rulenode" >
       <bpmndi:BPMNShape bpmnElement="_17" >
-        <dc:Bounds x="100" y="23" width="80" height="48" />
+        <dc:Bounds x="96" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="368" y="12" width="105" height="48" />
+        <dc:Bounds x="582" y="7" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_1" >
         <dc:Bounds x="16" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" >
-        <dc:Bounds x="152" y="108" width="80" height="48" />
+        <dc:Bounds x="208" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_11" >
-        <dc:Bounds x="215" y="16" width="88" height="48" />
+        <dc:Bounds x="320" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="528" y="142" width="48" height="48" />
+        <dc:Bounds x="728" y="99" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
-        <dc:Bounds x="321" y="78" width="48" height="48" />
+        <dc:Bounds x="432" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_14" >
-        <dc:Bounds x="517" y="23" width="48" height="48" />
+        <dc:Bounds x="733" y="13" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="387" y="144" width="105" height="48" />
+        <dc:Bounds x="581" y="97" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_17" >
         <di:waypoint x="40" y="80" />
-        <di:waypoint x="140" y="47" />
+        <di:waypoint x="136" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_16" >
-        <di:waypoint x="345" y="102" />
-        <di:waypoint x="420" y="36" />
+        <di:waypoint x="456" y="80" />
+        <di:waypoint x="622" y="31" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_17-_4" >
-        <di:waypoint x="140" y="47" />
-        <di:waypoint x="192" y="132" />
+        <di:waypoint x="136" y="80" />
+        <di:waypoint x="248" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_4-_11" >
-        <di:waypoint x="192" y="132" />
-        <di:waypoint x="259" y="40" />
+        <di:waypoint x="248" y="80" />
+        <di:waypoint x="360" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_15-_12" >
-        <di:waypoint x="439" y="168" />
-        <di:waypoint x="552" y="166" />
+        <di:waypoint x="621" y="121" />
+        <di:waypoint x="752" y="123" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_11-_13" >
-        <di:waypoint x="259" y="40" />
-        <di:waypoint x="345" y="102" />
+        <di:waypoint x="360" y="80" />
+        <di:waypoint x="456" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_16-_14" >
-        <di:waypoint x="420" y="36" />
-        <di:waypoint x="541" y="47" />
+        <di:waypoint x="622" y="31" />
+        <di:waypoint x="757" y="37" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_15" >
-        <di:waypoint x="345" y="102" />
-        <di:waypoint x="439" y="168" />
+        <di:waypoint x="456" y="80" />
+        <di:waypoint x="621" y="121" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

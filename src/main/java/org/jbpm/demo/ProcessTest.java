@@ -1,4 +1,4 @@
-package com.sample;
+package org.jbpm.demo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class ProcessTest {
 			KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newThreadedFileLogger(ksession, "test", 1000);
 			ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new WSHumanTaskHandler());
 
-			// start a new process instance
+			// start a new process instance by setup of a Person and Request.
 			Person person = new Person("john", "John Doe");
 			person.setAge(16);
 			Request request = new Request("12345");
@@ -36,12 +36,17 @@ public class ProcessTest {
 			request.setAmount(1000L);
 			ksession.insert(person);
 
+			// put them in the Map to be passed to the startProcess.
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("aPerson", person);
 			params.put("aRequest", request);
-			WorkflowProcessInstance processInstance = (WorkflowProcessInstance) ksession.startProcess("com.sample.bpmn.hello", params);
+			
+			// Fire it up!
+			WorkflowProcessInstance processInstance = (WorkflowProcessInstance) ksession.startProcess("org.jbpm.demo.rulenode", params);
 			ksession.insert(processInstance);
 			ksession.fireAllRules();
+			
+			// Finished, clean up the logger.
 			System.out.println("Process Ended.");
 			logger.close();
 		} catch (Throwable t) {
@@ -51,7 +56,7 @@ public class ProcessTest {
 
 	private static KnowledgeBase readKnowledgeBase() throws Exception {
 		KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-		kbuilder.add(ResourceFactory.newClassPathResource("sample.bpmn"), ResourceType.BPMN2);
+		kbuilder.add(ResourceFactory.newClassPathResource("rulenodedemo.bpmn2"), ResourceType.BPMN2);
 		kbuilder.add(ResourceFactory.newClassPathResource("validation.drl"),
 				ResourceType.DRL);
 
