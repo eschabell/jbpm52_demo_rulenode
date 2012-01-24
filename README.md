@@ -37,8 +37,6 @@ An example run should look like this if your validRequest is true:
 
 	Entering Evaluation Node
 
-	We have 0 Valid Requests
-
 	Leaving Evaluation Node
 
 	Gateway has detected a request with value of: true

@@ -70,7 +70,7 @@ for ( QueryResultsRow row : results ) {
 	}
 }
 
-System.out.println("We have "+results.size() + " Valid Requests");
+//System.out.println("We have "+results.size() + " Valid Requests");
 
 System.out.println("Leaving Evaluation Node");</script>
     </scriptTask>
