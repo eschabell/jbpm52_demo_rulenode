@@ -46,18 +46,21 @@ System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"
 System.out.println("Leaving Initialize Node");
 </script>
     </scriptTask>
-    <startEvent id="_1" name="Start" />
-    <scriptTask id="_16" name="Invalid Action" >
+    <scriptTask id="_16" name="Invalid Action" scriptFormat="http://www.java.com/java" >
       <script>System.out.println("Entering Invalid Action Node.");
+
+System.out.println("Detected and acting on a Invalid Request.");
 
 System.out.println("Leaving Invalid Action Node.");</script>
     </scriptTask>
+    <startEvent id="_1" name="Start" />
     <businessRuleTask id="_4" name="BusinessRule" g:ruleFlowGroup="Validation" >
     </businessRuleTask>
     <scriptTask id="_11" name="Evaluation" scriptFormat="http://www.java.com/java" >
       <script>System.out.println("Entering Evaluation Node");
 
 QueryResults results = kcontext.getKnowledgeRuntime().getQueryResults("validRequest");
+System.out.println("We have "+results.size() + " Requests");
 
 for ( QueryResultsRow row : results ) {
 	System.out.println("Row of results is: " + row); 
@@ -67,10 +70,14 @@ for ( QueryResultsRow row : results ) {
 	{ 
 			kcontext.setVariable("validRequest", true);
 //			kcontext.setVariable("requestName" , r.getPersonId();
+			System.out.println("ID:" + r.getPersonId() + " is Valid: " + r.isValid() + "\n");
+	}
+	else
+	{
+			System.out.println("ID:" + r.getPersonId() + " is not Valid: " + r.isValid() + "\n");
 	}
 }
 
-//System.out.println("We have "+results.size() + " Valid Requests");
 
 System.out.println("Leaving Evaluation Node");</script>
     </scriptTask>
@@ -81,16 +88,19 @@ System.out.println("Leaving Evaluation Node");</script>
     <endEvent id="_14" name="Invalid End" >
         <terminateEventDefinition/>
     </endEvent>
-    <scriptTask id="_15" name="Valid Action" >
+    <scriptTask id="_15" name="Valid Action" scriptFormat="http://www.java.com/java" >
       <script>System.out.println("Entering Valid Action Node.");
+
+System.out.println("Detected and acting on a Valid Request.");
 
 System.out.println("Leaving Valid Action Node.");</script>
     </scriptTask>
 
     <!-- connections -->
     <sequenceFlow id="_1-_17" sourceRef="_1" targetRef="_17" />
-    <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="invalid Request" tns:priority="99" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.jboss.org/drools/rule" >eval(true)</conditionExpression>
+    <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="invalid Request" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Invalid Request path...");
+return validRequest;</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="_17-_4" sourceRef="_17" targetRef="_4" />
     <sequenceFlow id="_4-_11" sourceRef="_4" targetRef="_11" />
@@ -98,7 +108,7 @@ System.out.println("Leaving Valid Action Node.");</script>
     <sequenceFlow id="_11-_13" sourceRef="_11" targetRef="_13" />
     <sequenceFlow id="_16-_14" sourceRef="_16" targetRef="_14" />
     <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="Valid Request" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway has detected a request with value of: " + validRequest);
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Valid Request path...");
 return validRequest;</conditionExpression>
     </sequenceFlow>
 
@@ -109,11 +119,11 @@ return validRequest;</conditionExpression>
       <bpmndi:BPMNShape bpmnElement="_17" >
         <dc:Bounds x="96" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_16" >
+        <dc:Bounds x="582" y="7" width="105" height="48" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_1" >
         <dc:Bounds x="16" y="56" width="48" height="48" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="582" y="7" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" >
         <dc:Bounds x="208" y="56" width="80" height="48" />
@@ -131,7 +141,7 @@ return validRequest;</conditionExpression>
         <dc:Bounds x="733" y="13" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="581" y="97" width="80" height="48" />
+        <dc:Bounds x="581" y="97" width="117" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_17" >
         <di:waypoint x="40" y="80" />
@@ -139,7 +149,7 @@ return validRequest;</conditionExpression>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_16" >
         <di:waypoint x="456" y="80" />
-        <di:waypoint x="622" y="31" />
+        <di:waypoint x="634" y="31" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_17-_4" >
         <di:waypoint x="136" y="80" />
@@ -150,7 +160,7 @@ return validRequest;</conditionExpression>
         <di:waypoint x="360" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_15-_12" >
-        <di:waypoint x="621" y="121" />
+        <di:waypoint x="639" y="121" />
         <di:waypoint x="752" y="123" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_11-_13" >
@@ -158,12 +168,12 @@ return validRequest;</conditionExpression>
         <di:waypoint x="456" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_16-_14" >
-        <di:waypoint x="622" y="31" />
+        <di:waypoint x="634" y="31" />
         <di:waypoint x="757" y="37" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_15" >
         <di:waypoint x="456" y="80" />
-        <di:waypoint x="621" y="121" />
+        <di:waypoint x="639" y="121" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
