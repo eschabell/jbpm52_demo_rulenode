@@ -30,7 +30,7 @@ public class ProcessTest {
 
 			// start a new process instance by setup of a Person and Request.
 			Person person = new Person("john", "John Doe");
-			person.setAge(16);
+			person.setAge(18);
 			Request request = new Request("12345");
 			request.setPersonId("john");
 			request.setAmount(1000L);
@@ -38,8 +38,8 @@ public class ProcessTest {
 
 			// put them in the Map to be passed to the startProcess.
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("aPerson", person);
-			params.put("aRequest", request);
+			params.put("personAge", person.getAge());
+			params.put("requestAmount", request.getAmount());
 			
 			// Fire it up!
 			WorkflowProcessInstance processInstance = (WorkflowProcessInstance) ksession.startProcess("org.jbpm.demo.rulenode", params);

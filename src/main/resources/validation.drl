@@ -5,17 +5,6 @@ query "validRequest" ()
     r : Request(valid == true)
 end
 
-
-
-rule "Unknown Customer" ruleflow-group "Validation"
-    when
-        r: Request()
-        not Person(id == r.personId)
-    then
-    	System.out.println("Unknown customer");
-        r.setInvalid("Unknown customer");
-end
-
 rule "Underage Customer" ruleflow-group "Validation"
     when
         r: Request()

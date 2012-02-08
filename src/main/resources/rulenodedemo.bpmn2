@@ -12,8 +12,9 @@
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
              xmlns:tns="http://www.jboss.org/drools">
 
+  <itemDefinition id="_requestAmountItem" structureRef="Float" />
+  <itemDefinition id="_personAgeItem" structureRef="Integer" />
   <itemDefinition id="_validRequestItem" structureRef="Boolean" />
-  <itemDefinition id="_requestNameItem" structureRef="String" />
 
   <process processType="Private" isExecutable="true" id="org.jbpm.demo.rulenode" name="Rule Node Demo" >
 
@@ -31,17 +32,13 @@
      <tns:import name="org.drools.runtime.rule.FactHandle" />
     </extensionElements>
     <!-- process variables -->
+    <property id="requestAmount" itemSubjectRef="_requestAmountItem"/>
+    <property id="personAge" itemSubjectRef="_personAgeItem"/>
     <property id="validRequest" itemSubjectRef="_validRequestItem"/>
-    <property id="requestName" itemSubjectRef="_requestNameItem"/>
 
     <!-- nodes -->
-    <scriptTask id="_17" name="Initialize" >
+    <scriptTask id="_17" name="Initialize" scriptFormat="http://www.java.com/java" >
       <script>System.out.println("Entering Initialize Node");
-
-// Set this to true or false to adjust path gateway will take.
-kcontext.setVariable("validRequest", true);
-
-System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
 
 System.out.println("Leaving Initialize Node");
 </script>
@@ -51,36 +48,16 @@ System.out.println("Leaving Initialize Node");
 
 System.out.println("Detected and acting on a Invalid Request.");
 
+// Set this to true or false to adjust path gateway will take.
+kcontext.setVariable("validRequest", false);
+
+System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
+
 System.out.println("Leaving Invalid Action Node.");</script>
     </scriptTask>
     <startEvent id="_1" name="Start" />
     <businessRuleTask id="_4" name="BusinessRule" g:ruleFlowGroup="Validation" >
     </businessRuleTask>
-    <scriptTask id="_11" name="Evaluation" scriptFormat="http://www.java.com/java" >
-      <script>System.out.println("Entering Evaluation Node");
-
-QueryResults results = kcontext.getKnowledgeRuntime().getQueryResults("validRequest");
-System.out.println("We have "+results.size() + " Requests");
-
-for ( QueryResultsRow row : results ) {
-	System.out.println("Row of results is: " + row); 
-	Request r = ( Request ) row.get( "r" );
-	System.out.println( "ID: " + r.getPersonId() + " is Valid: "+r.isValid() + "\n" );
-    if  (r.isValid() )
-	{ 
-			kcontext.setVariable("validRequest", true);
-//			kcontext.setVariable("requestName" , r.getPersonId();
-			System.out.println("ID:" + r.getPersonId() + " is Valid: " + r.isValid() + "\n");
-	}
-	else
-	{
-			System.out.println("ID:" + r.getPersonId() + " is not Valid: " + r.isValid() + "\n");
-	}
-}
-
-
-System.out.println("Leaving Evaluation Node");</script>
-    </scriptTask>
     <endEvent id="_12" name="Valid End" >
         <terminateEventDefinition/>
     </endEvent>
@@ -93,6 +70,11 @@ System.out.println("Leaving Evaluation Node");</script>
 
 System.out.println("Detected and acting on a Valid Request.");
 
+// Set this to true or false to adjust path gateway will take.
+kcontext.setVariable("validRequest", true);
+
+System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
+
 System.out.println("Leaving Valid Action Node.");</script>
     </scriptTask>
 
@@ -100,16 +82,15 @@ System.out.println("Leaving Valid Action Node.");</script>
     <sequenceFlow id="_1-_17" sourceRef="_1" targetRef="_17" />
     <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="invalid Request" tns:priority="2" >
       <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Invalid Request path...");
-return validRequest;</conditionExpression>
+return personAge &lt; 18; </conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="_17-_4" sourceRef="_17" targetRef="_4" />
-    <sequenceFlow id="_4-_11" sourceRef="_4" targetRef="_11" />
     <sequenceFlow id="_15-_12" sourceRef="_15" targetRef="_12" />
-    <sequenceFlow id="_11-_13" sourceRef="_11" targetRef="_13" />
+    <sequenceFlow id="_4-_13" sourceRef="_4" targetRef="_13" />
     <sequenceFlow id="_16-_14" sourceRef="_16" targetRef="_14" />
     <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="Valid Request" tns:priority="1" >
       <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Valid Request path...");
-return validRequest;</conditionExpression>
+return personAge &gt; 17;</conditionExpression>
     </sequenceFlow>
 
   </process>
@@ -120,7 +101,7 @@ return validRequest;</conditionExpression>
         <dc:Bounds x="96" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="582" y="7" width="105" height="48" />
+        <dc:Bounds x="473" y="13" width="117" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_1" >
         <dc:Bounds x="16" y="56" width="48" height="48" />
@@ -128,52 +109,45 @@ return validRequest;</conditionExpression>
       <bpmndi:BPMNShape bpmnElement="_4" >
         <dc:Bounds x="208" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_11" >
-        <dc:Bounds x="320" y="56" width="80" height="48" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="728" y="99" width="48" height="48" />
+        <dc:Bounds x="647" y="104" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
-        <dc:Bounds x="432" y="56" width="48" height="48" />
+        <dc:Bounds x="320" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_14" >
-        <dc:Bounds x="733" y="13" width="48" height="48" />
+        <dc:Bounds x="652" y="9" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="581" y="97" width="117" height="48" />
+        <dc:Bounds x="469" y="107" width="117" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_17" >
         <di:waypoint x="40" y="80" />
         <di:waypoint x="136" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_16" >
-        <di:waypoint x="456" y="80" />
-        <di:waypoint x="634" y="31" />
+        <di:waypoint x="344" y="80" />
+        <di:waypoint x="531" y="37" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_17-_4" >
         <di:waypoint x="136" y="80" />
         <di:waypoint x="248" y="80" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_4-_11" >
-        <di:waypoint x="248" y="80" />
-        <di:waypoint x="360" y="80" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_15-_12" >
-        <di:waypoint x="639" y="121" />
-        <di:waypoint x="752" y="123" />
+        <di:waypoint x="527" y="131" />
+        <di:waypoint x="671" y="128" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_11-_13" >
-        <di:waypoint x="360" y="80" />
-        <di:waypoint x="456" y="80" />
+      <bpmndi:BPMNEdge bpmnElement="_4-_13" >
+        <di:waypoint x="248" y="80" />
+        <di:waypoint x="344" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_16-_14" >
-        <di:waypoint x="634" y="31" />
-        <di:waypoint x="757" y="37" />
+        <di:waypoint x="531" y="37" />
+        <di:waypoint x="676" y="33" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_15" >
-        <di:waypoint x="456" y="80" />
-        <di:waypoint x="639" y="121" />
+        <di:waypoint x="344" y="80" />
+        <di:waypoint x="527" y="131" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

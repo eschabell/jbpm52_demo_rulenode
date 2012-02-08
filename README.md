@@ -14,34 +14,27 @@ To make use of this process project, just clone and make use of the maven setup 
 	4) run ProcessTest class (output in console) at src/main/java/ProcessTest
   
 You can read the test class comments for details as to what is happening and you will see the output 
-of the process as it enters and leaves nodes. You can tweak the path taken by setting a variable 
-'validRequest' in the Initialize node, it is found in the Action property of that node and looks like
-this:
+of the process as it enters and leaves nodes. The age of the person in the test currently determines
+if the request is Valid or Invalid (18+ age).
 
-	System.out.println("Entering Initialize Node");
-
-	// Set this to true or false to adjust path gateway will take.
-	kcontext.setVariable("validRequest", true);
-
-	System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
-
-	System.out.println("Leaving Initialize Node");
+Still TODO: integrate the Business Rule node to actually do something with an external rule file and 
+to extend valid path to then check for valid amount in request.
 
 An example run should look like this if your validRequest is true:
 
 	Entering Initialize Node
 
-	Set validRequest to: true
-
 	Leaving Initialize Node
 
-	Entering Evaluation Node
+	Gateway evaluating for Invalid Request path...
 
-	Leaving Evaluation Node
-
-	Gateway has detected a request with value of: true
+	Gateway evaluating for Valid Request path...
 
 	Entering Valid Action Node.
+
+	Detected and acting on a Valid Request.
+
+	Set validRequest to: true
 
 	Leaving Valid Action Node.
 
