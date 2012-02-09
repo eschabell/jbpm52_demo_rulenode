@@ -4,7 +4,7 @@ public class Request {
 	
 	private String id;
 	private String personId;
-	private Long amount;
+	private Integer amount;
 	private boolean valid = true;
 	private String invalidReason;
 	private boolean canceled = false;
@@ -25,11 +25,11 @@ public class Request {
 		this.personId = personId;
 	}
 	
-	public Long getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

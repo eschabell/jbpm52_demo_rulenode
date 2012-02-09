@@ -12,85 +12,106 @@
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
              xmlns:tns="http://www.jboss.org/drools">
 
-  <itemDefinition id="_requestAmountItem" structureRef="Float" />
-  <itemDefinition id="_personAgeItem" structureRef="Integer" />
   <itemDefinition id="_validRequestItem" structureRef="Boolean" />
+  <itemDefinition id="_personItem" structureRef="org.jbpm.demo.Person" />
+  <itemDefinition id="_requestItem" structureRef="org.jbpm.demo.Request" />
 
   <process processType="Private" isExecutable="true" id="org.jbpm.demo.rulenode" name="Rule Node Demo" >
 
-    <extensionElements>
-     <tns:import name="java.util.Collection" />
-     <tns:import name="java.util.List" />
-     <tns:import name="java.util.ArrayList" />
-     <tns:import name="java.util.Iterator" />
-     <tns:import name="org.jbpm.demo.Person" />
-     <tns:import name="org.jbpm.demo.Request" />
-     <tns:import name="org.drools.runtime.rule.QueryResults" />
-     <tns:import name="org.drools.runtime.rule.QueryResultsRow" />
-     <tns:import name="org.drools.runtime.KnowledgeRuntime" />
-     <tns:import name="org.drools.runtime.StatefulKnowledgeSession" />
-     <tns:import name="org.drools.runtime.rule.FactHandle" />
-    </extensionElements>
     <!-- process variables -->
-    <property id="requestAmount" itemSubjectRef="_requestAmountItem"/>
-    <property id="personAge" itemSubjectRef="_personAgeItem"/>
     <property id="validRequest" itemSubjectRef="_validRequestItem"/>
+    <property id="person" itemSubjectRef="_personItem"/>
+    <property id="request" itemSubjectRef="_requestItem"/>
 
     <!-- nodes -->
     <scriptTask id="_17" name="Initialize" scriptFormat="http://www.java.com/java" >
-      <script>System.out.println("Entering Initialize Node");
+      <script>System.out.println("Entering " + kcontext.getNodeInstance().getNodeName() +" Node");
 
-System.out.println("Leaving Initialize Node");
+System.out.println("Leaving " + kcontext.getNodeInstance().getNodeName() +" Node");
 </script>
     </scriptTask>
-    <scriptTask id="_16" name="Invalid Action" scriptFormat="http://www.java.com/java" >
-      <script>System.out.println("Entering Invalid Action Node.");
-
-System.out.println("Detected and acting on a Invalid Request.");
+    <scriptTask id="_16" name="Underaged" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering " + kcontext.getNodeInstance().getNodeName() +" Node");
 
 // Set this to true or false to adjust path gateway will take.
+System.out.println("Detected and reporting invalid request.");
 kcontext.setVariable("validRequest", false);
 
 System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
 
-System.out.println("Leaving Invalid Action Node.");</script>
+System.out.println("Leaving " + kcontext.getNodeInstance().getNodeName() +" Node");
+</script>
     </scriptTask>
     <startEvent id="_1" name="Start" />
-    <businessRuleTask id="_4" name="BusinessRule" g:ruleFlowGroup="Validation" >
+    <scriptTask id="_19" name="Rich Customer" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering " + kcontext.getNodeInstance().getNodeName() +" Node");
+
+// Set this to true or false to adjust path gateway will take.
+System.out.println("Detected and reporting valid request.");
+kcontext.setVariable("validRequest", true);
+
+System.out.println("Leaving " + kcontext.getNodeInstance().getNodeName() +" Node");
+</script>
+    </scriptTask>
+    <exclusiveGateway id="_18" name="Decide Financial Status" gatewayDirection="Diverging" />
+    <endEvent id="_21" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <scriptTask id="_20" name="Poor Customer" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering " + kcontext.getNodeInstance().getNodeName() +" Node");
+
+// Set this to true or false to adjust path gateway will take.
+System.out.println("Detected and reporting invalid request.");
+kcontext.setVariable("validRequest", false);
+
+System.out.println("Leaving " + kcontext.getNodeInstance().getNodeName() +" Node");
+</script>
+    </scriptTask>
+    <businessRuleTask id="_22" name="FinanceRules" g:ruleFlowGroup="Validation" >
     </businessRuleTask>
     <endEvent id="_12" name="Valid End" >
         <terminateEventDefinition/>
     </endEvent>
-    <exclusiveGateway id="_13" name="Gateway" gatewayDirection="Diverging" />
-    <endEvent id="_14" name="Invalid End" >
+    <exclusiveGateway id="_13" name="Decide Age Category" gatewayDirection="Diverging" />
+    <endEvent id="_14" name="Minor Customer End" >
         <terminateEventDefinition/>
     </endEvent>
-    <scriptTask id="_15" name="Valid Action" scriptFormat="http://www.java.com/java" >
-      <script>System.out.println("Entering Valid Action Node.");
-
-System.out.println("Detected and acting on a Valid Request.");
+    <scriptTask id="_15" name="Adult Customer" scriptFormat="http://www.java.com/java" >
+      <script>System.out.println("Entering " + kcontext.getNodeInstance().getNodeName() +" Node");
 
 // Set this to true or false to adjust path gateway will take.
+System.out.println("Detected and reporting valid request.");
 kcontext.setVariable("validRequest", true);
 
 System.out.println("Set validRequest to: " + kcontext.getVariable("validRequest"));
 
-System.out.println("Leaving Valid Action Node.");</script>
+System.out.println("Leaving " + kcontext.getNodeInstance().getNodeName() +" Node");
+</script>
     </scriptTask>
 
     <!-- connections -->
     <sequenceFlow id="_1-_17" sourceRef="_1" targetRef="_17" />
-    <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="invalid Request" tns:priority="2" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Invalid Request path...");
-return personAge &lt; 18; </conditionExpression>
+    <sequenceFlow id="_13-_16" sourceRef="_13" targetRef="_16" name="under age" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for " + kcontext.getNodeInstance().getNodeName() + " path...");
+return person.getAge() &lt; 18; </conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="_17-_4" sourceRef="_17" targetRef="_4" />
-    <sequenceFlow id="_15-_12" sourceRef="_15" targetRef="_12" />
-    <sequenceFlow id="_4-_13" sourceRef="_4" targetRef="_13" />
+    <sequenceFlow id="_18-_19" sourceRef="_18" targetRef="_19" name="plenty of money" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for " + kcontext.getNodeInstance().getNodeName() + " path...");
+return request.getAmount() &gt; 999; </conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_22-_18" sourceRef="_22" targetRef="_18" />
+    <sequenceFlow id="_19-_21" sourceRef="_19" targetRef="_21" />
+    <sequenceFlow id="_18-_20" sourceRef="_18" targetRef="_20" name="not enough money" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for " + kcontext.getNodeInstance().getNodeName() + " path...");
+return request.getAmount() &lt; 1000; </conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_15-_22" sourceRef="_15" targetRef="_22" />
+    <sequenceFlow id="_20-_12" sourceRef="_20" targetRef="_12" />
+    <sequenceFlow id="_17-_13" sourceRef="_17" targetRef="_13" />
     <sequenceFlow id="_16-_14" sourceRef="_16" targetRef="_14" />
-    <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="Valid Request" tns:priority="1" >
-      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for Valid Request path...");
-return personAge &gt; 17;</conditionExpression>
+    <sequenceFlow id="_13-_15" sourceRef="_13" targetRef="_15" name="adult" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >System.out.println("Gateway evaluating for " + kcontext.getNodeInstance().getNodeName() + " path...");
+return person.getAge() &gt; 17;</conditionExpression>
     </sequenceFlow>
 
   </process>
@@ -101,53 +122,81 @@ return personAge &gt; 17;</conditionExpression>
         <dc:Bounds x="96" y="56" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_16" >
-        <dc:Bounds x="473" y="13" width="117" height="48" />
+        <dc:Bounds x="345" y="57" width="117" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_1" >
         <dc:Bounds x="16" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="_4" >
-        <dc:Bounds x="208" y="56" width="80" height="48" />
+      <bpmndi:BPMNShape bpmnElement="_19" >
+        <dc:Bounds x="646" y="163" width="106" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_18" >
+        <dc:Bounds x="494" y="164" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_21" >
+        <dc:Bounds x="773" y="161" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_20" >
+        <dc:Bounds x="466" y="262" width="106" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_22" >
+        <dc:Bounds x="340" y="169" width="80" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_12" >
-        <dc:Bounds x="647" y="104" width="48" height="48" />
+        <dc:Bounds x="658" y="262" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_13" >
-        <dc:Bounds x="320" y="56" width="48" height="48" />
+        <dc:Bounds x="208" y="56" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_14" >
-        <dc:Bounds x="652" y="9" width="48" height="48" />
+        <dc:Bounds x="526" y="54" width="48" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_15" >
-        <dc:Bounds x="469" y="107" width="117" height="48" />
+        <dc:Bounds x="172" y="166" width="117" height="48" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_1-_17" >
         <di:waypoint x="40" y="80" />
         <di:waypoint x="136" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_16" >
-        <di:waypoint x="344" y="80" />
-        <di:waypoint x="531" y="37" />
+        <di:waypoint x="232" y="80" />
+        <di:waypoint x="403" y="81" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_17-_4" >
+      <bpmndi:BPMNEdge bpmnElement="_18-_19" >
+        <di:waypoint x="518" y="188" />
+        <di:waypoint x="699" y="187" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_22-_18" >
+        <di:waypoint x="380" y="193" />
+        <di:waypoint x="518" y="188" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_19-_21" >
+        <di:waypoint x="699" y="187" />
+        <di:waypoint x="797" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_18-_20" >
+        <di:waypoint x="518" y="188" />
+        <di:waypoint x="519" y="286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15-_22" >
+        <di:waypoint x="230" y="190" />
+        <di:waypoint x="380" y="193" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_20-_12" >
+        <di:waypoint x="519" y="286" />
+        <di:waypoint x="682" y="286" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17-_13" >
         <di:waypoint x="136" y="80" />
-        <di:waypoint x="248" y="80" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_15-_12" >
-        <di:waypoint x="527" y="131" />
-        <di:waypoint x="671" y="128" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_4-_13" >
-        <di:waypoint x="248" y="80" />
-        <di:waypoint x="344" y="80" />
+        <di:waypoint x="232" y="80" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_16-_14" >
-        <di:waypoint x="531" y="37" />
-        <di:waypoint x="676" y="33" />
+        <di:waypoint x="403" y="81" />
+        <di:waypoint x="550" y="78" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_13-_15" >
-        <di:waypoint x="344" y="80" />
-        <di:waypoint x="527" y="131" />
+        <di:waypoint x="232" y="80" />
+        <di:waypoint x="230" y="190" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

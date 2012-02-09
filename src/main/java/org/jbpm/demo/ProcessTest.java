@@ -13,7 +13,6 @@ import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.process.WorkflowProcessInstance;
 import org.jbpm.process.workitem.wsht.WSHumanTaskHandler;
-//import org.jbpm.process.workitem.wsht.WSHumanTaskHandler;
 
 /**
  * This is a sample file to launch a process.
@@ -29,17 +28,17 @@ public class ProcessTest {
 			ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new WSHumanTaskHandler());
 
 			// start a new process instance by setup of a Person and Request.
-			Person person = new Person("john", "John Doe");
-			person.setAge(18);
-			Request request = new Request("12345");
-			request.setPersonId("john");
-			request.setAmount(1000L);
+			Person person = new Person("erics", "Eric D. Schabell");
+			person.setAge(43);
+			Request request = new Request("1");
+			request.setPersonId("erics");
+			request.setAmount(1000);
 			ksession.insert(person);
 
 			// put them in the Map to be passed to the startProcess.
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("personAge", person.getAge());
-			params.put("requestAmount", request.getAmount());
+			params.put("person", person);
+			params.put("request", request);
 			
 			// Fire it up!
 			WorkflowProcessInstance processInstance = (WorkflowProcessInstance) ksession.startProcess("org.jbpm.demo.rulenode", params);
@@ -57,8 +56,7 @@ public class ProcessTest {
 	private static KnowledgeBase readKnowledgeBase() throws Exception {
 		KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
 		kbuilder.add(ResourceFactory.newClassPathResource("rulenodedemo.bpmn2"), ResourceType.BPMN2);
-		kbuilder.add(ResourceFactory.newClassPathResource("validation.drl"),
-				ResourceType.DRL);
+		kbuilder.add(ResourceFactory.newClassPathResource("financerules.drl"), ResourceType.DRL);
 
 		return kbuilder.newKnowledgeBase();
 	}
