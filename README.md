@@ -15,28 +15,45 @@ To make use of this process project, just clone and make use of the maven setup 
   
 You can read the test class comments for details as to what is happening and you will see the output 
 of the process as it enters and leaves nodes. The age of the person in the test currently determines
-if the request is Valid or Invalid (18+ age).
+if the request is Valid or Invalid (18+ age) and then the amount of the persons request is tested for
+valid or invalid (amount >= 1000).
 
-Still TODO: integrate the Business Rule node to actually do something with an external rule file and 
+Still TODO: integrate the Finance Rules to actually do something with an external rule file and 
 to extend valid path to then check for valid amount in request.
 
-An example run should look like this if your validRequest is true:
+An example run should look like this if your request is of valid age and amount:
 
 	Entering Initialize Node
 
 	Leaving Initialize Node
 
-	Gateway evaluating for Invalid Request path...
+	Gateway: Qualify Age
 
-	Gateway evaluating for Valid Request path...
+	Gateway: Qualify Age
 
-	Entering Valid Action Node.
+	Entering Adult Customer Node
 
-	Detected and acting on a Valid Request.
+	Detected and reporting valid request
 
 	Set validRequest to: true
 
-	Leaving Valid Action Node.
+	Leaving Adult Customer Node
+
+	Entering Finance Rules Node
+
+	Leaving Finance Rules Node.
+
+	Gateway: Decide Financial Status
+
+	Leaving Finance Rules Node.
+
+	Gateway: Decide Financial Status
+
+	Entering Rich Customer Node
+
+	Detected and reporting valid request
+
+	Leaving Rich Customer Node
 
 	Process Ended.
 

@@ -7,5 +7,5 @@ rule "Check Amount Customer" ruleflow-group "Validation"
         Person(id == r.personId, r.amount < 2000);
     then
     	System.out.println("Under funded customer");
-        r.setInvalid("Under funded customer");
+        r.setInvalid("Poor customer");
 end

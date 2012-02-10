@@ -32,7 +32,7 @@ public class ProcessTest {
 			person.setAge(43);
 			Request request = new Request("1");
 			request.setPersonId("erics");
-			request.setAmount(1000);
+			request.setAmount(1999);
 			ksession.insert(person);
 
 			// put them in the Map to be passed to the startProcess.
