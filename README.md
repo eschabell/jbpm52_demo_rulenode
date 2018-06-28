@@ -1,3 +1,6 @@
+Update: June 2018 moved to [Gitlab](https://gitlab.com/eschabell/jbpm52_demo_rulenode)
+
+
 jBPM Demo with a Rule based Gateway (decision)
 =============================================
 
